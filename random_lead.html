@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr.SxR - Name & Password Generator</title>
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --secondary-color: #3a5ad9;
+            --accent-color: #4CAF50;
+            --dark-color: #333;
+            --light-color: #f0f2f5;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: var(--dark-color);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%; /* Make logo round */
+            object-fit: cover;
+        }
+        
+        .site-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        .container {
+            background-color: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            color: var(--dark-color);
+            margin-top: 0;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+        
+        .result-display {
+            background-color: var(--light-color);
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-text {
+            font-family: monospace;
+            font-size: 1rem;
+            word-break: break-all;
+            flex: 1;
+            margin-right: 0.5rem;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .settings {
+            margin-bottom: 1rem;
+        }
+        
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+        
+        .length-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        input[type="range"] {
+            width: 60%;
+            margin: 0 0.5rem;
+        }
+        
+        .length-value {
+            width: 30px;
+            text-align: center;
+        }
+        
+        input[type="checkbox"] {
+            transform: scale(1.1);
+        }
+        
+        .generate-btn {
+            background-color: var(--accent-color);
+            color: var(--white);
+            padding: 0.6rem;
+            border: none;
+            width: 100%;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .generate-btn:hover {
+            background-color: #3e8e41;
+        }
+        
+        .name-type {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        
+        .radio-container {
+            display: flex;
+            gap: 0.3rem;
+            align-items: center;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: var(--white);
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: var(--white);
+            text-align: center;
+            padding: 0.5rem;
+            margin-top: auto;
+            font-size: 0.8rem;
+        }
+        
+        /* Mobile optimization */
+        @media (max-width: 767px) {
+            .container {
+                padding: 0.75rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            h2 {
+                margin-bottom: 0.5rem;
+                font-size: 1.1rem;
+            }
+            
+            .result-display {
+                padding: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .result-text {
+                font-size: 0.9rem;
+            }
+            
+            .copy-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.9rem;
+            }
+            
+            .settings {
+                margin-bottom: 0.75rem;
+                font-size: 0.9rem;
+            }
+            
+            .setting {
+                margin-bottom: 0.3rem;
+            }
+            
+            .generate-btn {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+            
+            main {
+                padding: 0.5rem;
+            }
+            
+            .radio-container {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/Mr-SxR/Web/refs/heads/main/SxR%20logo%20(1).png" alt="Mr.SxR Logo" class="logo">
+            <h1 class="site-name">Mr.SxR</h1>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h2>Random Name Generator</h2>
+            
+            <div class="result-display">
+                <span id="name-result" class="result-text">Random Name</span>
+                <button class="copy-btn" id="copy-name">Copy</button>
+            </div>
+            
+            <div class="settings">
+                <div class="name-type">
+                    <span>Name Type:</span>
+                    <div>
+                        <label class="radio-container">
+                            <input type="radio" name="gender" id="male" checked>
+                            Male
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="gender" id="female">
+                            Female
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="setting">
+                    <label for="include-middle">Include Middle Name</label>
+                    <input type="checkbox" id="include-middle">
+                </div>
+                
+                <div class="setting">
+                    <label for="include-title">Include Title (Mr/Mrs/etc)</label>
+                    <input type="checkbox" id="include-title">
+                </div>
+            </div>
+            
+            <button class="generate-btn" id="generate-name">Generate Name</button>
+        </div>
+        
+        <div class="container">
+            <h2>Password Generator</h2>
+            
+            <div class="result-display">
+                <span id="password-result" class="result-text">Random Password</span>
+                <button class="copy-btn" id="copy-password">Copy</button>
+            </div>
+            
+            <div class="settings">
+                <div class="length-container">
+                    <label for="password-length">Length:</label>
+                    <input type="range" id="password-length" min="4" max="32" value="12">
+                    <span id="length-value" class="length-value">12</span>
+                </div>
+                
+                <div class="setting">
+                    <label for="uppercase">Include Uppercase</label>
+                    <input type="checkbox" id="uppercase" checked>
+                </div>
+                
+                <div class="setting">
+                    <label for="lowercase">Include Lowercase</label>
+                    <input type="checkbox" id="lowercase" checked>
+                </div>
+                
+                <div class="setting">
+                    <label for="numbers">Include Numbers</label>
+                    <input type="checkbox" id="numbers" checked>
+                </div>
+                
+                <div class="setting">
+                    <label for="symbols">Include Symbols</label>
+                    <input type="checkbox" id="symbols">
+                </div>
+            </div>
+            
+            <button class="generate-btn" id="generate-password">Generate Password</button>
+        </div>
+    </main>
+    
+    <div class="toast" id="toast">Copied to clipboard!</div>
+    
+    <footer>
+        &copy; 2025 Mr.SxR - Name & Password Generator
+    </footer>
+    
+    <script>
+        // Elements - Name Generator
+        const nameResultEl = document.getElementById('name-result');
+        const maleRadioEl = document.getElementById('male');
+        const femaleRadioEl = document.getElementById('female');
+        const includeMiddleEl = document.getElementById('include-middle');
+        const includeTitleEl = document.getElementById('include-title');
+        const generateNameBtn = document.getElementById('generate-name');
+        const copyNameBtn = document.getElementById('copy-name');
+        
+        // Elements - Password Generator
+        const passwordResultEl = document.getElementById('password-result');
+        const passwordLengthEl = document.getElementById('password-length');
+        const lengthValueEl = document.getElementById('length-value');
+        const uppercaseEl = document.getElementById('uppercase');
+        const lowercaseEl = document.getElementById('lowercase');
+        const numbersEl = document.getElementById('numbers');
+        const symbolsEl = document.getElementById('symbols');
+        const generatePasswordBtn = document.getElementById('generate-password');
+        const copyPasswordBtn = document.getElementById('copy-password');
+        
+        // Shared Elements
+        const toast = document.getElementById('toast');
+        
+        // USA Name Data
+        const maleFirstNames = [
+            'James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph', 'Thomas', 'Charles',
+            'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald', 'Steven', 'Paul', 'Andrew', 'Joshua',
+            'Kenneth', 'Kevin', 'Brian', 'George', 'Timothy', 'Ronald', 'Edward', 'Jason', 'Jeffrey', 'Ryan',
+            'Jacob', 'Gary', 'Nicholas', 'Eric', 'Jonathan', 'Stephen', 'Larry', 'Justin', 'Scott', 'Brandon',
+            'Benjamin', 'Samuel', 'Gregory', 'Alexander', 'Patrick', 'Frank', 'Raymond', 'Jack', 'Dennis', 'Jerry'
+        ];
+        
+        const femaleFirstNames = [
+            'Mary', 'Patricia', 'Jennifer', 'Linda', 'Elizabeth', 'Barbara', 'Susan', 'Jessica', 'Sarah', 'Karen',
+            'Lisa', 'Nancy', 'Betty', 'Margaret', 'Sandra', 'Ashley', 'Kimberly', 'Emily', 'Donna', 'Michelle',
+            'Carol', 'Amanda', 'Dorothy', 'Melissa', 'Deborah', 'Stephanie', 'Rebecca', 'Sharon', 'Laura', 'Cynthia',
+            'Kathleen', 'Amy', 'Angela', 'Shirley', 'Anna', 'Brenda', 'Pamela', 'Emma', 'Nicole', 'Helen',
+            'Samantha', 'Katherine', 'Christine', 'Debra', 'Rachel', 'Carolyn', 'Janet', 'Catherine', 'Maria', 'Heather'
+        ];
+        
+        const middleNames = [
+            'James', 'John', 'Robert', 'William', 'David', 'Thomas', 'Lee', 'Marie', 'Ann', 'Lynn',
+            'Elizabeth', 'Jane', 'Rose', 'Grace', 'May', 'Louise', 'Allen', 'Ray', 'Edward', 'Jean',
+            'Michael', 'Joseph', 'Alexander', 'Francis', 'Claire', 'Mae', 'Nicole', 'Scott', 'Jay', 'Paul'
+        ];
+        
+        const lastNames = [
+            'Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor',
+            'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Thompson', 'Garcia', 'Martinez', 'Robinson',
+            'Clark', 'Rodriguez', 'Lewis', 'Lee', 'Walker', 'Hall', 'Allen', 'Young', 'Hernandez', 'King',
+            'Wright', 'Lopez', 'Hill', 'Scott', 'Green', 'Adams', 'Baker', 'Gonzalez', 'Nelson', 'Carter',
+            'Mitchell', 'Perez', 'Roberts', 'Turner', 'Phillips', 'Campbell', 'Parker', 'Evans', 'Edwards', 'Collins'
+        ];
+        
+        const maleTitles = ['Mr.', 'Dr.', 'Prof.', 'Rev.'];
+        const femaleTitles = ['Mrs.', 'Ms.', 'Miss', 'Dr.', 'Prof.'];
+        
+        // Character sets for password generator
+        const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+        const numberChars = '0123456789';
+        const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        
+        // Update password length value display
+        passwordLengthEl.addEventListener('input', () => {
+            lengthValueEl.textContent = passwordLengthEl.value;
+        });
+        
+        // Generate Random USA Name
+        generateNameBtn.addEventListener('click', generateName);
+        
+        function generateName() {
+            const isMale = maleRadioEl.checked;
+            const includeMiddle = includeMiddleEl.checked;
+            const includeTitle = includeTitleEl.checked;
+            
+            // Generate random indices
+            const firstNameList = isMale ? maleFirstNames : femaleFirstNames;
+            const firstNameIndex = Math.floor(Math.random() * firstNameList.length);
+            const middleNameIndex = Math.floor(Math.random() * middleNames.length);
+            const lastNameIndex = Math.floor(Math.random() * lastNames.length);
+            const titleList = isMale ? maleTitles : femaleTitles;
+            const titleIndex = Math.floor(Math.random() * titleList.length);
+            
+            // Build the name
+            let fullName = "";
+            
+            if (includeTitle) {
+                fullName += titleList[titleIndex] + " ";
+            }
+            
+            fullName += firstNameList[firstNameIndex];
+            
+            if (includeMiddle) {
+                fullName += " " + middleNames[middleNameIndex];
+            }
+            
+            fullName += " " + lastNames[lastNameIndex];
+            
+            // Update UI
+            nameResultEl.textContent = fullName;
+        }
+        
+        // Generate Password
+        generatePasswordBtn.addEventListener('click', generatePassword);
+        
+        function generatePassword() {
+            let availableChars = '';
+            let password = '';
+            
+            // Check if at least one character set is selected
+            if (!uppercaseEl.checked && !lowercaseEl.checked && 
+                !numbersEl.checked && !symbolsEl.checked) {
+                passwordResultEl.textContent = 'Please select at least one option';
+                return;
+            }
+            
+            // Build character set based on options
+            if (uppercaseEl.checked) availableChars += uppercaseChars;
+            if (lowercaseEl.checked) availableChars += lowercaseChars;
+            if (numbersEl.checked) availableChars += numberChars;
+            if (symbolsEl.checked) availableChars += symbolChars;
+            
+            // Ensure password contains at least one character from each selected set
+            if (uppercaseEl.checked) 
+                password += uppercaseChars[Math.floor(Math.random() * uppercaseChars.length)];
+            if (lowercaseEl.checked) 
+                password += lowercaseChars[Math.floor(Math.random() * lowercaseChars.length)];
+            if (numbersEl.checked) 
+                password += numberChars[Math.floor(Math.random() * numberChars.length)];
+            if (symbolsEl.checked) 
+                password += symbolChars[Math.floor(Math.random() * symbolChars.length)];
+            
+            // Fill the rest of the password
+            const remainingLength = parseInt(passwordLengthEl.value) - password.length;
+            
+            for (let i = 0; i < remainingLength; i++) {
+                const randomIndex = Math.floor(Math.random() * availableChars.length);
+                password += availableChars[randomIndex];
+            }
+            
+            // Shuffle the password characters
+            password = shuffleString(password);
+            
+            // Update UI
+            passwordResultEl.textContent = password;
+        }
+        
+        // Shuffle string characters
+        function shuffleString(str) {
+            const array = str.split('');
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array.join('');
+        }
+        
+        // Copy functions - Fixed to work properly
+        copyNameBtn.addEventListener('click', function() {
+            const textToCopy = nameResultEl.textContent;
+            
+            if (textToCopy === 'Random Name') {
+                return;
+            }
+            
+            // Create a temporary textarea element to copy from
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            textarea.style.position = 'fixed';  // Prevent scrolling to the bottom
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                // Execute copy command and show toast on success
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                // Fallback to clipboard API if available
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => showToast())
+                        .catch(err => console.error('Could not copy text: ', err));
+                }
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        });
+        
+        copyPasswordBtn.addEventListener('click', function() {
+            const textToCopy = passwordResultEl.textContent;
+            
+            if (textToCopy === 'Random Password' || 
+                textToCopy === 'Please select at least one option') {
+                return;
+            }
+            
+            // Create a temporary textarea element to copy from
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            textarea.style.position = 'fixed';  // Prevent scrolling to the bottom
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                // Execute copy command and show toast on success
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+                // Fallback to clipboard API if available
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => showToast())
+                        .catch(err => console.error('Could not copy text: ', err));
+                }
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        });
+        
+        // Show toast notification
+        function showToast() {
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+        
+        // Initialize with defaults
+        lengthValueEl.textContent = passwordLengthEl.value;
+        
+        // Generate default values on page load
+        window.addEventListener('load', function() {
+            generateName();
+            generatePassword();
+        });
+    </script>
+</body>
+</html>
